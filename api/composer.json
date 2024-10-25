@@ -6,11 +6,15 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/core": "^3.2",
+        "cloudevents/sdk-php": "^1.1",
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
         "nelmio/cors-bundle": "^2.2",
+        "nyholm/psr7": "*",
+        "php-http/discovery": "^1.20",
         "phpstan/phpdoc-parser": "^1.16",
+        "psr/http-factory": "^1.1",
         "runtime/frankenphp-symfony": "^0.2",
         "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",
@@ -22,10 +26,12 @@
         "symfony/monolog-bundle": "^3.8",
         "symfony/property-access": "6.4.*",
         "symfony/property-info": "6.4.*",
+        "symfony/psr-http-message-bridge": "6.4.*",
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
         "symfony/serializer": "6.4.*",
         "symfony/twig-bundle": "6.4.*",
+        "symfony/uid": "6.4.*",
         "symfony/validator": "6.4.*",
         "symfony/yaml": "6.4.*"
     },
@@ -47,6 +53,7 @@
         },
         "sort-packages": true,
         "allow-plugins": {
+            "php-http/discovery": true,
             "symfony/flex": true,
             "symfony/runtime": true
         }

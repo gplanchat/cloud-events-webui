@@ -154,6 +154,18 @@
     "nikic/php-parser": {
         "version": "v4.13.2"
     },
+    "nyholm/psr7": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "4a8c0345442dcca1d8a2c65633dcf0285dd5a5a2"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
     "ocramius/package-versions": {
         "version": "1.9.0"
     },
@@ -162,6 +174,18 @@
     },
     "php-cs-fixer/diff": {
         "version": "v2.0.2"
+    },
+    "php-http/discovery": {
+        "version": "1.20",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.18",
+            "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
+        },
+        "files": [
+            "config/packages/http_discovery.yaml"
+        ]
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -447,6 +471,18 @@
         "files": [
             "config/packages/twig.yaml",
             "templates/base.html.twig"
+        ]
+    },
+    "symfony/uid": {
+        "version": "6.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.2",
+            "ref": "d294ad4add3e15d7eb1bae0221588ca89b38e558"
+        },
+        "files": [
+            "config/packages/uid.yaml"
         ]
     },
     "symfony/validator": {

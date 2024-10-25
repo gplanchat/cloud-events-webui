@@ -22,3 +22,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    CloudEvents\Http\UnmarshallerInterface:
+        factory: ['CloudEvents\Http\Unmarshaller', 'createJsonUnmarshaller']
+
+    Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface: '@Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory'
+
+    Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory: ~
+
