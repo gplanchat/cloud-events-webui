@@ -71,43 +71,37 @@ class Event
     /**
      * The CloudEvent source
      */
-    #[ORM\Column]
-    #[Assert\NotBlank]
+    #[ORM\Column(nullable: true)]
     public ?string $source;
 
     /**
      * The CloudEvent subject
      */
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     public ?\DateTimeInterface $time;
 
     /**
      * The CloudEvent data Content-Type
      */
-    #[ORM\Column]
-    #[Assert\NotBlank]
+    #[ORM\Column(nullable: true)]
     public ?string $dataContentType;
 
     /**
      * The CloudEvent data Json Schema
      */
-    #[ORM\Column]
-    #[Assert\NotBlank]
+    #[ORM\Column(nullable: true)]
     public ?string $dataSchema;
 
     /**
      * The CloudEvent subject
      */
-    #[ORM\Column]
-    #[Assert\NotBlank]
+    #[ORM\Column(nullable: true)]
     public ?string $subject;
 
     /**
      * The CloudEvent extensions
      */
     #[ORM\Column(type: Types::JSON)]
-    #[Assert\NotBlank]
     public array $extensions;
 
     public function __construct(
@@ -146,7 +140,7 @@ class Event
             $event->getId(),
             $event->getSpecVersion(),
             $event->getType(),
-            \json_decode($event->getData()),
+            $event->getData(),
             $event->getSource(),
             $event->getTime(),
             $event->getDataContentType(),
