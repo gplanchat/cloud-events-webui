@@ -1,14 +1,14 @@
 apiVersion: skaffold/v4beta4
 kind: Config
 metadata:
-  name: api-platform
+  name: cloudevents-webui
 build:
   artifacts:
-    - image: api-platform-php
+    - image: cloudevents-webui-php
       context: ../api
       docker:
         target: app_php
-    - image: api-platform-pwa
+    - image: cloudevents-webui-pwa
       context: ../pwa
       docker:
         target: prod
@@ -17,8 +17,8 @@ deploy:
   kubeContext: minikube
   helm:
     releases:
-    - name: api-platform
-      chartPath: ./api-platform
+    - name: cloudevents-webui
+      chartPath: ./cloudevents-webui
       namespace: default
       setValueTemplates:
         php.image.repository: "{{.IMAGE_REPO_api_platform_php}}"
