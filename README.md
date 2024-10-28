@@ -1,9 +1,13 @@
 Cloud Events Web UI
 ===
 
+A web interface for your Cloud Events infrastructure. This application stores all events making you able to see what data is sent between your microservices. 
+
+![Events view page](assets/img.png)
+
 ## Install with Docker Compose
 
-1. clone the repository
+1. clone the repository$
     ```shell
     git clone https://github.com/gplanchat/cloud-events-webui.git
     ```
