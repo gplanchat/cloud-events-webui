@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
@@ -26,10 +27,11 @@ use Symfony\Component\Routing\Attribute\Route;
 final readonly class CloudEventController
 {
     public function __construct(
-        private UnmarshallerInterface       $unmarshaller,
-        private LoggerInterface             $logger,
+        private UnmarshallerInterface $unmarshaller,
+        private LoggerInterface $logger,
         private HttpMessageFactoryInterface $factory,
-        private EntityManagerInterface      $entityManager,
+        private EntityManagerInterface $entityManager,
+        private MessageBusInterface $messageBus,
     ) {
     }
 
@@ -57,6 +59,8 @@ final readonly class CloudEventController
 
             $entity = Event::fromCloudEvent($event);
             $this->entityManager->persist($entity);
+
+            $this->messageBus->dispatch($event);
         }
         $this->entityManager->flush();
 

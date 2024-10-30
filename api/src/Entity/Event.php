@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\QueryParameter;
@@ -15,16 +16,14 @@ use Symfony\Bridge\Doctrine\Types\UlidType;
 use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * This is a dummy entity. Remove it!
- */
 #[ApiResource(
     operations: [
         new Get(),
         new GetCollection(),
+        new Delete(),
     ],
     mercure: true,
-    paginationItemsPerPage: 100
+    paginationItemsPerPage: 100,
 )]
 #[QueryParameter(key: ':property', filter: SearchFilter::class)]
 #[QueryParameter(key: 'sort[:property]', filter: OrderFilter::class)]

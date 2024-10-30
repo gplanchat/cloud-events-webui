@@ -25,6 +25,9 @@ services:
     
     CloudEvents\Http\UnmarshallerInterface:
         factory: ['CloudEvents\Http\Unmarshaller', 'createJsonUnmarshaller']
+    
+    CloudEvents\Http\MarshallerInterface:
+        factory: ['CloudEvents\Http\Marshaller', 'createJsonMarshaller']
 
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface: '@Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory'
 

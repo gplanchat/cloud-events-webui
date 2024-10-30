@@ -23,6 +23,13 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+        scoped_clients:
+            unsecuredHttpClient:
+                scope: '^https:\/\/(?:host\.docker\.internal|localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|(172|10).\d+\.\d+\.\d+|[^/:]+\.local)(?::\d+)?\/'
+                verify_peer: false
+                verify_host: false
+
 when@test:
     framework:
         test: true
