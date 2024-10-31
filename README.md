@@ -9,6 +9,7 @@ This application stores all events making you able to see what data is sent betw
 ![Events view page #3](assets/events-view-screencapture-3.png)
 
 Additionally, you can redispatch events to your other services, making this app act like a __simplified__ Knative Broker resource.
+The broker only supports _Prefix_, _Suffix_ and _Exactly_ matchers.
 
 ![Subscribers view page](assets/subscribers-view-screencapture.png)
 
