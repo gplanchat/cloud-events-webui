@@ -66,7 +66,7 @@ class Subscriber
     /**
      * Bearer authentication to the CloudEvents sink
      */
-    #[ORM\Column(nullable: true, options: ['default' => null])]
+    #[ORM\Column(length: 65535, nullable: true, options: ['default' => null])]
     public ?string $bearerAuthentication;
 
     public function __construct(
