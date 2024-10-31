@@ -32,4 +32,5 @@ services:
     Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface: '@Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory'
 
     Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory: ~
-
+    
+    Symfony\Component\HttpClient\Psr18Client: '@Psr\Http\Client\ClientInterface' 

@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -23,11 +25,20 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(),
     ],
     mercure: true,
+    paginationClientItemsPerPage: true,
+    paginationViaCursor: [
+        ['field' => 'id', 'direction' => 'DESC'],
+    ],
     paginationItemsPerPage: 100,
+    paginationMaximumItemsPerPage: 500,
 )]
 #[QueryParameter(key: ':property', filter: SearchFilter::class)]
 #[QueryParameter(key: 'sort[:property]', filter: OrderFilter::class)]
+#[ApiFilter(RangeFilter::class, properties: ["id"])]
+#[ApiFilter(OrderFilter::class, properties: ["id" => "DESC"])]
 #[ORM\Entity]
+#[ORM\Index(columns: ['event_id'])]
+#[ORM\Index(columns: ['time'])]
 class Event
 {
     /**
