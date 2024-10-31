@@ -12,6 +12,7 @@ Additionally, you can redispatch events to your other services, making this app 
 The broker only supports _Prefix_, _Suffix_ and _Exactly_ matchers.
 
 ![Subscribers view page](assets/subscribers-view-screencapture.png)
+![Subscribers edit page](assets/subscribers-edit-screencapture.png)
 
 This application is meant for development/debugging purposes on local development environment.
 It lacks a lot of security features to be deployed in production environments.
