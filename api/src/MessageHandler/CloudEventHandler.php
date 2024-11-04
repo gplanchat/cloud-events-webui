@@ -35,25 +35,37 @@ final class CloudEventHandler
                 continue;
             }
 
-            $events = $this->eventEmitter->emitOne(
-                $event,
-                $this->uriFactory->createUri($subscriber->serviceUri),
-                'POST',
-                $subscriber->verifyPeer,
-            );
+            try {
+                $responseEvents = $this->eventEmitter->emitOne(
+                    $event,
+                    $this->uriFactory->createUri($subscriber->serviceUri),
+                    'POST',
+                    $subscriber->verifyPeer,
+                    $subscriber->bearerAuthentication,
+                );
+            } catch (SinkServiceUnavailableException $exception) {
+                $this->logger->emergency($exception->getMessage());
+                continue;
+            } catch (CloudEventsClientException $exception) {
+                $this->logger->critical($exception->getMessage());
+                continue;
+            } catch (PayloadDecodingFailureException $exception) {
+                $this->logger->error($exception->getMessage());
+                continue;
+            }
 
-            foreach ($events as $event) {
-                if (!$event instanceof CloudEventInterface
-                    || CloudEventInterface::SPEC_VERSION !== $event->getSpecVersion()
+            foreach ($responseEvents as $responseEvent) {
+                if (!$responseEvent instanceof CloudEventInterface
+                    || CloudEventInterface::SPEC_VERSION !== $responseEvent->getSpecVersion()
                 ) {
-                    $this->logger->warning('Invalid event received.', ['event' => $event]);
+                    $this->logger->warning('Invalid event received.', ['event' => $responseEvent]);
                     continue;
                 }
 
-                $entity = Event::fromCloudEvent($event);
+                $entity = Event::fromCloudEvent($responseEvent);
                 $this->entityManager->persist($entity);
 
-                $this->messageBus->dispatch($event);
+                $this->messageBus->dispatch($responseEvent);
             }
             $this->entityManager->flush();
         }

@@ -19,7 +19,6 @@ use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\UriInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Psr18Client;
-use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 
 #[WithMonologChannel('knative')]
 final class KnativeCloudEventEmitter
@@ -53,6 +52,14 @@ final class KnativeCloudEventEmitter
                 ])->sendRequest($request);
             }
 
+            if ($response->getStatusCode() === 401) {
+                throw new SinkServiceUnavailableException('Unauthorized request to sink.');
+            } else if ($response->getStatusCode() === 403) {
+                throw new SinkServiceUnavailableException('Forbidden request to sink.');
+            } else if (!in_array($response->getStatusCode(), [200, 201, 202])) {
+                throw new SinkServiceUnavailableException($response->getReasonPhrase());
+            }
+
             if (!$response->hasHeader('Content-Type')
                 || intval($response->getHeaderLine('Content-Length')) <= 0
                 || intval($response->getHeaderLine('content-length')) <= 0) {
@@ -63,26 +70,22 @@ final class KnativeCloudEventEmitter
             throw new SinkServiceUnavailableException('The CloudEvents sink is not reachable or a network error happened. Please check the logs in order to get more details about the error. This can be a temporary failure of a 3rd-party system.', previous: $exception);
         } catch (RequestExceptionInterface $exception) {
             $this->logger->error($exception->getMessage(), ['exception' => $exception]);
-            throw new InvalidRequestException('Your CloudEvents request to the sink failed. you may need to check the contents of your events that may not have been properly encode.', previous: $exception);
+            throw new SinkServiceUnavailableException('Your CloudEvents request to the sink failed. you may need to check the contents of your events that may not have been properly encoded.', previous: $exception);
         } catch (ClientExceptionInterface $exception) {
             $this->logger->critical($exception->getMessage(), ['exception' => $exception]);
             throw new CloudEventsClientException('Your CloudEvents client failed in an unanticipated manner. Please check the logs in order to get more details about the error.', previous: $exception);
         }
 
-        if (!in_array($response->getStatusCode(), [200, 201, 202])) {
-            throw new PayloadDecodingFailureException($response->getReasonPhrase());
-        }
-
         try {
             $events = $this->unmarshaller->unmarshal($response);
         } catch (InvalidPayloadSyntaxException $exception) {
-            throw new UnrecoverableMessageHandlingException('Could not unmarshal Cloud Events request properly: the payload syntax is invalid.', previous: $exception);
+            throw new PayloadDecodingFailureException('Could not unmarshal Cloud Events request properly: the payload syntax is invalid.', previous: $exception);
         } catch (MissingAttributeException $exception) {
-            throw new UnrecoverableMessageHandlingException('Could not unmarshal Cloud Events request properly: a Cloud Events attribute is missing.', previous: $exception);
+            throw new PayloadDecodingFailureException('Could not unmarshal Cloud Events request properly: a Cloud Events attribute is missing.', previous: $exception);
         } catch (UnsupportedContentTypeException $exception) {
-            throw new UnrecoverableMessageHandlingException('Could not unmarshal Cloud Events request properly: the content type is not supported.', previous: $exception);
+            throw new PayloadDecodingFailureException('Could not unmarshal Cloud Events request properly: the content type is not supported.', previous: $exception);
         } catch (UnsupportedSpecVersionException $exception) {
-            throw new UnrecoverableMessageHandlingException('Could not unmarshal Cloud Events request properly: the spec version is not supported.', previous: $exception);
+            throw new PayloadDecodingFailureException('Could not unmarshal Cloud Events request properly: the spec version is not supported.', previous: $exception);
         }
 
         return new ArrayIterator($events);
