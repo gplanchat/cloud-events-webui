@@ -20,8 +20,8 @@ const ListActions = () => (
 )
 
 const filters = [
-  <SearchInput name="free_text" source="q" alwaysOn />,
-  <TextInput label="Source" name="source" source="source" />,
+  <SearchInput key="free_text" name="free_text" source="q" alwaysOn />,
+  <TextInput key="source" label="Source" name="source" source="source" />,
 ]
 
 const EventsList = () => {
