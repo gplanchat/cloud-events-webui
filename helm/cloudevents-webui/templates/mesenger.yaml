@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cloudevents-webui.fullname" . }}-api
+  name: {{ include "cloudevents-webui.fullname" . }}-messenger
   labels:
     {{- include "cloudevents-webui.labels" . | nindent 4 }}
 spec:
@@ -35,6 +35,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.php.image.repository }}:{{ .Values.php.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.php.image.pullPolicy }}
+          command:
+            - 'bin/console'
+            - 'messenger:consume'
+            - 'async'
+            - 'sync'
           env:
             - name: SERVER_NAME
               value: :80
