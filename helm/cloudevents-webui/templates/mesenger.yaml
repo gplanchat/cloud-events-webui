@@ -39,7 +39,6 @@ spec:
             - 'bin/console'
             - 'messenger:consume'
             - 'async'
-            - 'sync'
           env:
             - name: SERVER_NAME
               value: :80
