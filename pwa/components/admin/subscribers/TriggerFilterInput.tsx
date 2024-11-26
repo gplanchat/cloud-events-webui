@@ -20,6 +20,11 @@ const TriggerFilterInput = (props: TriggerFilterInputProps) => {
           { id: 'prefix', name: 'Prefix' },
           { id: 'suffix', name: 'Suffix' },
         ]} />
+        <SelectInput source="field" choices={[
+          { id: 'type', name: 'Type' },
+          { id: 'subject', name: 'Subject' },
+          { id: 'source', name: 'Source' },
+        ]} />
         <TextInput source="value"/>
       </SimpleFormIterator>
     </ArrayInput>

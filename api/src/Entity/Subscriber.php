@@ -30,8 +30,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[QueryParameter(key: 'sort[:property]', filter: OrderFilter::class)]
 #[ApiFilter(RangeFilter::class, properties: ["id"])]
 #[ApiFilter(OrderFilter::class, properties: ["id" => "DESC"])]
+#[ApiFilter(SearchFilter::class, properties: ['label' => 'partial'])]
 #[ORM\Entity]
 #[ORM\Index(columns: ['service_uri'])]
+#[ORM\Index(columns: ['label'])]
 class Subscriber
 {
     /**
@@ -44,7 +46,20 @@ class Subscriber
     private Ulid $id;
 
     /**
+     * The Trigger destination service CloudEvent URI
+     */
+    #[ORM\Column]
+    #[Assert\NotBlank]
+    public string $label;
+
+    /**
      * The Trigger filters
+     *
+     * @var list<array{
+     *     field: "type"|"subject"|"source",
+     *     type: "exact"|"prefix"|"suffix",
+     *     value: string,
+     * }>
      */
     #[ORM\Column(type: Types::JSON)]
     #[Assert\NotBlank]
@@ -87,20 +102,29 @@ class Subscriber
         return $this->id;
     }
 
+    private function extractValue(string $field, CloudEventInterface $event): string
+    {
+        return match ($field) {
+            'type' => $event->getType(),
+            'subject' => $event->getSubject(),
+            'source' => $event->getSource(),
+        };
+    }
+
     public function matches(CloudEventInterface $event): bool
     {
         foreach ($this->filters as $filter) {
             $matches = match ($filter['type']) {
-                'exact' => strcmp($filter['value'], $event->getType()) === 0,
-                'prefix' => strrpos($event->getType(), $filter['value']) === 0,
-                'suffix' => strpos($event->getType(), $filter['value']) === strlen($event->getType()) - strlen($filter['value']),
+                'exact' => strcmp($filter['value'], $this->extractValue($filter['field'], $event)) === 0,
+                'prefix' => strrpos($this->extractValue($filter['field'], $event), $filter['value']) === 0,
+                'suffix' => strpos($this->extractValue($filter['field'], $event), $filter['value']) === strlen($this->extractValue($filter['field'], $event)) - strlen($filter['value']),
             };
 
-            if ($matches) {
-                return true;
+            if (!$matches) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
