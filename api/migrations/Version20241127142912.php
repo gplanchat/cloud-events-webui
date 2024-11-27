@@ -20,7 +20,7 @@ final class Version20241127142912 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE subscriber ADD label VARCHAR(255) NOT NULL');
+        $this->addSql('ALTER TABLE subscriber ADD label VARCHAR(255) NULL');
         $this->addSql('CREATE INDEX IDX_AD005B69EA750E8 ON subscriber (label)');
     }
 
