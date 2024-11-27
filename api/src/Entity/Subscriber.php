@@ -76,7 +76,8 @@ class Subscriber
      * Wether we should check Trigger destination service CloudEvent URI's TLS certificate
      */
     #[ORM\Column(options: ['default' => true])]
-    public bool $verifyPeer;
+    #[Assert\Type(Types::BOOLEAN)]
+    public bool $verifyPeer = true;
 
     /**
      * Bearer authentication to the CloudEvents sink
