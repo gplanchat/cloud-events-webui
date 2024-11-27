@@ -18,7 +18,7 @@ use Symfony\Component\Uid\Ulid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    mercure: true,
+    mercure: false,
     paginationClientItemsPerPage: true,
     paginationViaCursor: [
         ['field' => 'id', 'direction' => 'DESC'],

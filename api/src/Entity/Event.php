@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
         new Delete(),
     ],
-    mercure: true,
+    mercure: false,
     paginationClientItemsPerPage: true,
     paginationViaCursor: [
         ['field' => 'id', 'direction' => 'DESC'],
