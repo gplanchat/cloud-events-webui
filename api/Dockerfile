@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 	file \
 	gettext \
 	git \
+	procps \
 	&& rm -rf /var/lib/apt/lists/*
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
