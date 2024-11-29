@@ -46,11 +46,25 @@ class Subscriber
     private Ulid $id;
 
     /**
-     * The Trigger destination service CloudEvent URI
+     * The user-friendly label of the subscriber
      */
     #[ORM\Column]
     #[Assert\NotBlank]
     public string $label;
+
+    /**
+     * The user-friendly description of the subscriber
+     */
+    #[ORM\Column(length: 65535, nullable: true)]
+    public ?string $description = null;
+
+    /**
+     * A unique code identifier the subscriber
+     */
+    #[ORM\Column(length: 255, nullable: true, options: ['default' => null])]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 255)]
+    public ?string $code = null;
 
     /**
      * The Trigger filters
@@ -83,7 +97,7 @@ class Subscriber
      * Bearer authentication to the CloudEvents sink
      */
     #[ORM\Column(length: 65535, nullable: true, options: ['default' => null])]
-    public ?string $bearerAuthentication;
+    public ?string $bearerAuthentication = null;
 
     public function __construct(
         string $serviceUri,
