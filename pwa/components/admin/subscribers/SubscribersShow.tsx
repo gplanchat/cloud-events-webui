@@ -15,6 +15,9 @@ const SubscribersShow = () => {
   return (
     <Show>
       <SimpleShowLayout>
+        <TextField source="label" />
+        <TextField source="description" />
+        <TextField source="code" sx={{ fontFamily: 'monospace' }} />
         <UrlField source="serviceUri" />
         <BooleanField
           source="verifyPeer"
