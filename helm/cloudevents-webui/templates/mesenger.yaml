@@ -38,6 +38,7 @@ spec:
           command:
             - 'bin/console'
             - 'messenger:consume'
+            - '-vv'
             - 'async'
           env:
             - name: SERVER_NAME
